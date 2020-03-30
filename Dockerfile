@@ -1,10 +1,9 @@
 FROM ubuntu:18.04
 MAINTAINER "hemant.pati@gmail.com"
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade && \
-    DEBIAN_FRONTEND=noninteractive apt-get -yq install net-tools nginx && \
-    rm -f /etc/nginx/fastcgi.conf /etc/nginx/fastcgi_params && \
-    rm -f /etc/nginx/snippets/fastcgi-php.conf /etc/nginx/snippets/snakeoil.conf
+RUN add-apt-repository -y ppa:nginx/stable apt-get update && \
+  apt-get install -y nginx rm -rf /var/lib/apt/lists/* && \
+  echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
+  chown -R www-data:www-data /var/lib/nginx
 EXPOSE 80
 EXPOSE 443
 COPY nginx/ssl /etc/nginx/ssl
